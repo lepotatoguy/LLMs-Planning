@@ -385,11 +385,11 @@ class BackPrompter():
             steps = str(steps)
             step_dict[steps] = {}
             progress.update(task_id, advance=1)
-            llm_response, messages, context_window_hit, rate_limit_hit, response_object, time_taken, sending_messages = send_query_with_feedback(query, engine, messages, use_llm_feedback['history'], temperatures['generator'])
+            llm_response, messages, context_window_hit, rate_limit_hit, response_object, time_taken, sending_messages, null_response = send_query_with_feedback(query, engine, messages, use_llm_feedback['history'], temperatures['generator'])
 
             step_dict[steps]['time_taken'] = time_taken 
             step_dict[steps]['sent_messages'] = sending_messages
-            if context_window_hit:
+            if context_window_hit or null_response:
                 break
             if rate_limit_hit:
                 print("Rate limit hit. Waiting for 60 seconds.")
@@ -490,7 +490,7 @@ class BackPrompter():
                         print("ERROR: Sound Verifier Dict Extraction error")
                         print(sound_verifier_json)
                         could_not_extract = True
-                        return query, feedback_messages, 0, could_not_extract
+                        return query, feedback_messages, 0, could_not_extract, step_dict
                 else:
                     sound_verification, sound_critique = "The plan is valid.", ""
                 try:
@@ -646,6 +646,7 @@ class BackPrompter():
                         instance_structured_output, failed_instances = future.result()
                     except Exception as e:
                         print(f"[-] Error: {e}")
+                        instance_structured_output = None
                     if instance_structured_output is not None:
                         print(f"Instance {instance_structured_output['instance_id']} completed")
                         # Check if instance already exists in structured output
@@ -714,7 +715,10 @@ class BackPrompter():
                 text = plan_verification_zero_shot_val_form(INIT, PLAN, GOAL,cot=use_llm_feedback['cot'])
         query += text
 
-        response, messages, _, _,_,_,_ = send_query_with_feedback(query, self.engine, messages, temp=temperatures['verifier'])
+        response, messages, _, _,_,_,_, null_response = send_query_with_feedback(query, self.engine, messages, temp=temperatures['verifier'])
+        if null_response:
+            print("[-] Received null response from LLM")
+            return "", messages
 
         return response, messages
 
@@ -737,7 +741,7 @@ class BackPrompter():
             step_dict[steps] = {}
             with lock:
                 progress.update(task_id, advance=1)
-            llm_response, messages, context_window_hit, rate_limit_hit, response_object, time_taken, sending_messages = send_query_with_feedback(query, engine, messages, use_llm_feedback['history'], temperatures['generator'])
+            llm_response, messages, context_window_hit, rate_limit_hit, response_object, time_taken, sending_messages, null_response = send_query_with_feedback(query, engine, messages, use_llm_feedback['history'], temperatures['generator'])
 
             step_dict[steps]['time_taken'] = time_taken
             step_dict[steps]['messages'] = sending_messages
@@ -752,7 +756,7 @@ class BackPrompter():
 # [PLAN END]
 #             """
 #             context_window_hit, rate_limit_hit = False, False
-            if context_window_hit:
+            if context_window_hit or null_response:
                 break
             if rate_limit_hit:
                 print("Rate limit hit. Waiting for 60 seconds.")
