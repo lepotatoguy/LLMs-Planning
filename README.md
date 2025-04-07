@@ -13,7 +13,7 @@ The leaderboard below shows the performance of the models on the PlanBench stati
 
 | Model Name | Model Type | Blocksworld - NL - 600 instances | Mystery Blocksworld - NL - 600 instances | Randomized Mystery Blocksworld - NL - 600 instances | Blocksworld Hard - PDDL - 110 instances |
 |------------|------------|----------------------------------|----------------------------------------|--------------------------------------------------|----------------------------------------|
-| Deepseek R1 | LRM | 99.1% | 54.1% | 25.8% | 53.6% |
+| Deepseek R1 | LRM | 99.1% | 43.3% | 25.8% | 53.6% |
 | o1-preview | LRM | 97.8% | 52.8% | 37.3% | 23.65% |
 | o1-mini | LRM | 56.6% | 19.1% | 3.5% | 10% |
 | Claude-3.5 Sonnet | LLM | 54.8% | 0% | - | - |
