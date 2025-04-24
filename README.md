@@ -3,9 +3,8 @@
 This repo has the code for three papers:
 1. The code in 'plan-bench' subdirectory belongs to the paper ["PlanBench: An Extensible Benchmark for Evaluating Large Language Models on Planning and Reasoning about Change"](https://arxiv.org/abs/2206.10498)
 2. The code in 'llm_planning_analysis' subdirectory belongs to the paper ["On the Planning Abilities of Large Language Models--A Critical Investigation"](https://arxiv.org/abs/2305.15771)
-3. **NEW**: 'llm_planning_analysis' subdirectory also contains the code for the paper ["Planning in Strawberry Fields:
-Evaluating and Improving the Planning and
-Scheduling Capabilities of LRM o1"](https://arxiv.org/pdf/2410.02162)
+3. **NEW**: 'llm_planning_analysis' subdirectory also contains the code for the paper ["A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1"](https://openreview.net/forum?id=FkKBxp0FhR)
+
 
 # PlanBench Static Test Set Leaderboard
 
@@ -55,13 +54,16 @@ On the Planning Abilities of Large Language Models - _NeurIPS 2023 Spotlight_:
 }
 ```
 
-Planning in Strawberry Fields - _A version to appear in TMLR_:
+A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1 - _TMLR_:
 ```
-@article{valmeekam2024planning,
-  title={Planning in Strawberry Fields: Evaluating and Improving the Planning and Scheduling Capabilities of LRM o1},
-  author={Valmeekam, Karthik and Stechly, Kaya and Gundawar, Atharva and Kambhampati, Subbarao},
-  journal={arXiv preprint arXiv:2410.02162},
-  year={2024}
+@article{valmeekam2025a,
+title={A Systematic Evaluation of the Planning and Scheduling Abilities of the Reasoning Model o1},
+author={Karthik Valmeekam and Kaya Stechly and Atharva Gundawar and Subbarao Kambhampati},
+journal={Transactions on Machine Learning Research},
+issn={2835-8856},
+year={2025},
+url={https://openreview.net/forum?id=FkKBxp0FhR},
+note={}
 }
 ```
 
