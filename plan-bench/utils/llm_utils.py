@@ -1,7 +1,9 @@
 from transformers import StoppingCriteriaList, StoppingCriteria
 import openai
 import os
-openai.api_key = os.environ["OPENAI_API_KEY"]
+import requests
+if "OPENAI_API_KEY" in os.environ:
+    openai.api_key = os.environ["OPENAI_API_KEY"]
 def generate_from_bloom(model, tokenizer, query, max_tokens):
     encoded_input = tokenizer(query, return_tensors='pt')
     stop = tokenizer("[PLAN END]", return_tensors='pt')
@@ -46,6 +48,23 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
             return text_response.strip()
         else:
             assert model is not None
+    elif engine == 'ollama':
+        try:
+            response = requests.post(
+                "http://localhost:11434/api/generate",
+                json={
+                    "model": "qwen:7b",  # or whatever model you pulled, e.g., "mistral", "llama2"
+                    "prompt": query,
+                    "stream": False
+                }
+            )
+            text_response = response.json()["response"]
+        except Exception as e:
+            max_token_err_flag = True
+            print("[-]: Failed Ollama query execution: {}".format(e))
+            text_response = ""
+
+        return text_response.strip()
     elif '_chat' in engine:
         
         eng = engine.split('_')[0]
