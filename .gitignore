@@ -7,6 +7,7 @@
 */*.sas
 */llm_plan
 */rough.py
+*.pyc
 */sas_plan_ver
 utils/__pycache__/*
 
@@ -29,6 +30,8 @@ plan-bench/responses/mystery_blocksworld_3/gpt-4_chat/task_1_plan_generation.jso
 plan-bench/responses/mystery_blocksworld_3/text-davinci-002/
 plan-bench/responses/random_blocksworld/
 plan-bench/responses/random_blocksworld_3/
+plan-bench/responses/ollama/
+plan-bench/responses/logistics/ollama/
 plan-bench/results/mystery_blocksworld/gpt-4_chat/task_1_plan_generation.json
 plan-bench/results/mystery_blocksworld/text-davinci-002/
 plan-bench/results/mystery_blocksworld_3/gpt-4_chat/task_1_plan_generation.json
