@@ -48,23 +48,106 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
             return text_response.strip()
         else:
             assert model is not None
+    # elif engine == 'ollama':
+    #     try:
+    #         response = requests.post(
+    #             "http://localhost:11434/api/generate",
+    #             json={
+    #                 "model": "qwen:7b",  # fixed as per your directive
+    #                 "prompt": query,
+    #                 "stream": False,
+    #                 "options": {
+    #                     "num_predict": max_tokens  # conform to `max_tokens` use
+    #                 }
+    #             }
+    #         )
+    #         response.raise_for_status()
+    #         json_response = response.json()
+
+    #         if "response" not in json_response:
+    #             raise ValueError("Missing 'response' key in Ollama output.")
+
+    #         raw = json_response["response"]
+
+    #         # Extract between delimiters
+    #         if "[PLAN BEGIN]" in raw and "[PLAN END]" in raw:
+    #             raw = raw.split("[PLAN BEGIN]", 1)[1].split("[PLAN END]", 1)[0].strip()
+    #         else:
+    #             # print("[-]: PLAN delimiters not found in Ollama response.")
+    #             # raw = ""
+    #             raw = raw.strip()
+
+    #         # Remove query echo if present
+    #         if raw.startswith(query):
+    #             raw = raw[len(query):].strip()
+
+    #         # Clean lines
+    #         cleaned_lines = []
+    #         for line in raw.split("\n"):
+    #             line = line.strip().strip(":.")
+    #             if line:
+    #                 cleaned_lines.append(line)
+
+    #         text_response = "\n".join(cleaned_lines)
+
+    #     except Exception as e:
+    #         max_token_err_flag = True
+    #         print("[-]: Failed Ollama query execution: {}".format(e))
+    #         text_response = ""
+
+    #     return text_response
+
     elif engine == 'ollama':
         try:
             response = requests.post(
                 "http://localhost:11434/api/generate",
                 json={
-                    "model": "qwen:7b",  # or whatever model you pulled, e.g., "mistral", "llama2"
+                    "model": "qwen:7b",  # or other model as needed
                     "prompt": query,
-                    "stream": False
+                    "stream": False,
+                    "options": {
+                        "num_predict": max_tokens  # equivalent to OpenAI's max_tokens
+                    }
                 }
             )
-            text_response = response.json()["response"]
+            response.raise_for_status()
+            json_response = response.json()
+
+            if "response" not in json_response:
+                raise ValueError("Missing 'response' key in Ollama output.")
+
+            raw = json_response["response"]
+
+            # Extract text between [PLAN BEGIN] and [PLAN END] if available
+            if "[PLAN BEGIN]" in raw and "[PLAN END]" in raw:
+                raw = raw.split("[PLAN BEGIN]", 1)[1].split("[PLAN END]", 1)[0].strip()
+            else:
+                print("[-]: PLAN delimiters not found in Ollama response.")
+                raw = raw.strip()
+
+            # Remove query echo if present
+            if raw.startswith(query):
+                raw = raw[len(query):].strip()
+
+            # Clean each line
+            cleaned_lines = []
+            for line in raw.split("\n"):
+                line = line.strip().strip(":").strip(".")
+                if line:
+                    cleaned_lines.append(line)
+
+            text_response = "\n".join(cleaned_lines)
+
         except Exception as e:
             max_token_err_flag = True
             print("[-]: Failed Ollama query execution: {}".format(e))
             text_response = ""
 
-        return text_response.strip()
+        return text_response
+
+
+
+
     elif '_chat' in engine:
         
         eng = engine.split('_')[0]
