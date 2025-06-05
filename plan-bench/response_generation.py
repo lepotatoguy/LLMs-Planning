@@ -30,6 +30,9 @@ class ResponseGenerator:
             # print(model)
             self.engine='finetuned'
             self.model = {'model':model}
+        elif self.engine == 'ollama':
+            # Ollama is queried via local HTTP; no model/tokenizer object required
+            self.model = {'model': 'qwen'}  # Pass dummy identifier for compliance
         else:
             self.model = None
     def read_config(self, config_file):
