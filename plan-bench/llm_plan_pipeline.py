@@ -27,6 +27,7 @@ if __name__=="__main__":
     parser.add_argument('--engine', type=str, required=True, help='Engine to use \
                         \n gpt-4_chat = GPT-4 \
                         \n bloom = Bloom \
+                        \n ollama = Model that you set using Ollamma (Default: qwen:7b) \
                         \n gpt-3.5-turbo_chat = GPT-3.5 Turbo \
                         \n davinci = GPT-3 Davinci \
                         \n curie = GPT-3 Curie \
